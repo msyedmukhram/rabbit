@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const selectedProduct = {
   name: "Stylish Jacket",
@@ -42,6 +43,25 @@ const ProductDetails = () => {
       setQuantity((prev)=> prev - 1);
     }
   }
+
+  const handleAddToCart = ()=>{
+    if(!selectedSize || !selectedColor){
+      toast.error('Please select a size and color before adding to cart.',{
+        duration:1000,
+      })
+      return
+    }
+
+    setIsButtonDisabled(true);
+
+    setTimeout(()=>{
+      toast.success('Product added to the cart!', {
+        duration: 1000,
+      });
+      setIsButtonDisabled(false);
+    },500)
+  }
+
   return (
     <div className="p-6">
       <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
@@ -135,9 +155,11 @@ const ProductDetails = () => {
             </div>
 
             <button
-              className="bg-black text-white py-2 px-6 rounded w-full mb-4"
+            onClick={handleAddToCart}
+              className={`bg-black text-white py-2 px-6 rounded w-full mb-4 ${isButtonDisabled ? 'cursor-not-allowed opacity-50':'hover:bg-gray-900'}`}
+              disabled={isButtonDisabled}
             >
-              ADD TO CART
+              {isButtonDisabled ? 'Adding...' : 'ADD TO CART'}              
             </button>
 
             <div className="mt-10 text-gray-700">
